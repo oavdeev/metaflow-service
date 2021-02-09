@@ -5,6 +5,12 @@ from services.data.postgres_async_db import AsyncPostgresDB
 from services.utils import logging
 from pyee import AsyncIOEventEmitter
 
+METADATA_TABLE_NAME = "task_metadata"
+ARTIFACT_TABLE_NAME = "artifact"
+RUN_TABLE_NAME = "run"
+TASK_TABLE_NAME = "task"
+FLOW_TABLE_NAME = "flow"
+STEP_TABLE_NAME = "step"
 
 class ListenNotify(object):
     def __init__(self, app, event_emitter=None, db=AsyncPostgresDB.get_instance()):
@@ -102,20 +108,20 @@ class ListenNotify(object):
 
 def resource_list(table_name: str, data: Dict):
     resource_paths = {
-        "flows_v3": [
+        FLOW_TABLE_NAME: [
             "/flows",
             "/flows/{flow_id}"
         ],
-        "runs_v3": [
+        RUN_TABLE_NAME: [
             "/runs",
             "/flows/{flow_id}/runs",
             "/flows/{flow_id}/runs/{run_number}"
         ],
-        "steps_v3": [
+        STEP_TABLE_NAME: [
             "/flows/{flow_id}/runs/{run_number}/steps",
             "/flows/{flow_id}/runs/{run_number}/steps/{step_name}"
         ],
-        "tasks_v3": [
+        TASK_TABLE_NAME: [
             "/flows/{flow_id}/runs/{run_number}/tasks",
             "/flows/{flow_id}/runs/{run_number}/steps/{step_name}/tasks",
             "/flows/{flow_id}/runs/{run_number}/steps/{step_name}/tasks/{task_id}",

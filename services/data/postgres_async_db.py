@@ -26,6 +26,10 @@ OLD_RUN_FAILURE_CUTOFF_TIME = int(os.environ.get("OLD_RUN_FAILURE_CUTOFF_TIME", 
 # Enable with env variable `DB_TRIGGER_CREATE=1`
 DB_TRIGGER_CREATE = os.environ.get("DB_TRIGGER_CREATE", 0) == "1"
 
+METADATA_TABLE_NAME = "task_metadata"
+ARTIFACT_TABLE_NAME = "artifact"
+RUN_TABLE_NAME = "run"
+TASK_TABLE_NAME = "task"
 
 class _AsyncPostgresDB(object):
     connection = None
@@ -642,13 +646,13 @@ class AsyncRunTablePostgres(AsyncPostgresTable):
         )
         """.format(
             table_name=table_name,
-            metadata_table="metadata_v3",
-            artifact_table="artifact_v3"
+            metadata_table=METADATA_TABLE_NAME,
+            artifact_table=ARTIFACT_TABLE_NAME
         ),
     ]
     # User should be considered NULL when 'user:*' tag is missing
     # This is usually the case with AWS Step Functions
-    select_columns = ["runs_v3.{0} AS {0}".format(k) for k in keys] \
+    select_columns = ["{1}.{0} AS {0}".format(k, RUN_TABLE_NAME) for k in keys] \
         + ["""
             (CASE
                 WHEN system_tags ? ('user:' || user_name)
@@ -889,11 +893,11 @@ class AsyncTaskTablePostgres(AsyncPostgresTable):
         )
         """.format(
             table_name=table_name,
-            metadata_table="metadata_v3",
-            artifact_table="artifact_v3"
+            metadata_table=METADATA_TABLE_NAME,
+            artifact_table=ARTIFACT_TABLE_NAME
         ),
     ]
-    select_columns = ["tasks_v3.{0} AS {0}".format(k) for k in keys]
+    select_columns = ["{1}.{0} AS {0}".format(k, TASK_TABLE_NAME) for k in keys]
     join_columns = [
         "attempt.started_at as started_at",
         """
