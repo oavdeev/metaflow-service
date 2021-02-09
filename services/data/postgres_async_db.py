@@ -64,6 +64,9 @@ class _AsyncPostgresDB(object):
         retries = 3
         for i in range(retries):
             try:
+                self.logger.info(
+                    "Attempting Connection.\n"
+                    " db_conf.dsn: {0}".format(db_conf.dsn))
                 self.pool = await aiopg.create_pool(
                     db_conf.dsn,
                     minsize=db_conf.pool_min,
@@ -88,6 +91,7 @@ class _AsyncPostgresDB(object):
                 break  # Break the retry loop
             except Exception as e:
                 self.logger.exception("Exception occured")
+                self.logger.exception(e)
                 if retries - i < 1:
                     raise e
                 time.sleep(1)
