@@ -629,7 +629,7 @@ class AsyncRunTablePostgres(AsyncPostgresTable):
             SELECT
                 artifacts.flow_id, artifacts.run_number, artifacts.step_name,
                 artifacts.task_id, artifacts.attempt_id, artifacts.ts_epoch,
-                attempt_ok.value::boolean as attempt_ok
+                attempt_ok.value::text::boolean as attempt_ok
             FROM {artifact_table} as artifacts
             LEFT JOIN {metadata_table} as attempt_ok ON (
                 artifacts.flow_id = attempt_ok.flow_id AND
@@ -849,7 +849,7 @@ class AsyncTaskTablePostgres(AsyncPostgresTable):
                 task_ok.location,
                 attempt.ts_epoch as started_at,
                 COALESCE(attempt_ok.ts_epoch, done.ts_epoch, task_ok.ts_epoch, attempt.ts_epoch) as finished_at,
-                attempt_ok.value::boolean as attempt_ok,
+                attempt_ok.value::text::boolean as attempt_ok,
                 foreach_stack.location as foreach_stack
             FROM {artifact_table} as task_ok
             LEFT JOIN {metadata_table} as attempt ON (
