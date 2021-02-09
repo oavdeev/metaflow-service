@@ -571,7 +571,7 @@ class PostgresUtils(object):
 
 class AsyncFlowTablePostgres(AsyncPostgresTable):
     flow_dict = {}
-    table_name = "flows_v3"
+    table_name = "flow"
     keys = ["flow_id", "user_name", "ts_epoch", "tags", "system_tags"]
     primary_keys = ["flow_id"]
     select_columns = keys
@@ -611,7 +611,7 @@ class AsyncRunTablePostgres(AsyncPostgresTable):
     run_by_flow_dict = {}
     _current_count = 0
     _row_type = RunRow
-    table_name = "runs_v3"
+    table_name = "run"
     keys = ["flow_id", "run_number", "run_id",
             "user_name", "ts_epoch", "last_heartbeat_ts", "tags", "system_tags"]
     primary_keys = ["flow_id", "run_number"]
@@ -768,7 +768,7 @@ class AsyncStepTablePostgres(AsyncPostgresTable):
     step_dict = {}
     run_to_step_dict = {}
     _row_type = StepRow
-    table_name = "steps_v3"
+    table_name = "step"
     keys = ["flow_id", "run_number", "run_id", "step_name",
             "user_name", "ts_epoch", "tags", "system_tags"]
     primary_keys = ["flow_id", "run_number", "step_name"]
@@ -825,7 +825,7 @@ class AsyncTaskTablePostgres(AsyncPostgresTable):
     step_to_task_dict = {}
     _current_count = 0
     _row_type = TaskRow
-    table_name = "tasks_v3"
+    table_name = "task"
     keys = ["flow_id", "run_number", "run_id", "step_name", "task_id",
             "task_name", "user_name", "ts_epoch", "last_heartbeat_ts", "tags", "system_tags"]
     primary_keys = ["flow_id", "run_number", "step_name", "task_id"]
@@ -1027,7 +1027,7 @@ class AsyncMetadataTablePostgres(AsyncPostgresTable):
     run_to_metadata_dict = {}
     _current_count = 0
     _row_type = MetadataRow
-    table_name = "metadata_v3"
+    table_name = "task_metadata"
     task_table_name = AsyncTaskTablePostgres.table_name
     keys = ["flow_id", "run_number", "run_id", "step_name", "task_id", "task_name", "id",
             "field_name", "value", "type", "user_name", "ts_epoch", "tags", "system_tags"]
@@ -1114,7 +1114,7 @@ class AsyncArtifactTablePostgres(AsyncPostgresTable):
     task_to_artifact_dict = {}
     current_count = 0
     _row_type = ArtifactRow
-    table_name = "artifact_v3"
+    table_name = "artifact"
     task_table_name = AsyncTaskTablePostgres.table_name
     ordering = ["attempt_id DESC"]
     keys = ["flow_id", "run_number", "run_id", "step_name", "task_id", "task_name", "name", "location",
