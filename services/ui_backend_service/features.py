@@ -20,6 +20,8 @@ def get_features():
         if key.startswith(FEATURE_ENV_PREFIX):
             val = val.lower()
             features[key] = val != '0' and val != 'false' and val != 'f'
+            print("key: {0} ; value {1} ; result {2} ;".format(key, val, str(
+                features[key])))
     return features
 
 
