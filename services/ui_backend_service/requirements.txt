@@ -5,3 +5,4 @@ pyee
 throttler
 psycopg2
 aiopg
+pygit2
